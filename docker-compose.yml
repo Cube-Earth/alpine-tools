@@ -1,0 +1,18 @@
+version: '3'
+services:
+  coreos-ct:
+    build:
+        context: coreos-ct
+        args:
+            - http_proxy
+            - https_proxy
+            - no_proxy
+    image: cubeearth/tmp_apline-tools_coreos-ct
+    volumes:
+    - ./apk_keys:/apk_keys
+    - ./apk:/apk
+    environment:
+    - GITHUB_EMAIL=${GITHUB_EMAIL}
+    - GITHUB_PWD=${GITHUB_PWD}
+    - GITHUB_REPO=${GITHUB_REPO}
+    - GITHUB_RELEASE=${GITHUB_RELEASE}

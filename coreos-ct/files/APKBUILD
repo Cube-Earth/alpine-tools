@@ -1,0 +1,36 @@
+pkgname=coreos-ct
+pkgver=$CT_VER
+pkgrel=0
+pkgdesc="CoreOS config transpiler"
+url="https://github.com/Cube-Earth/alpine-tools/tree/master/coreos-ct"
+arch="x86_64"
+license="ASL 2.0"
+maintainer="Necromancer <necromancer@cube.earth>"
+depends=""
+makedepends="$depends git musl-dev"
+install=""
+#subpackages="$pkgname-dev $pkgname-doc"
+source=""
+builddir="$GOPATH/src/github.com/coreos/container-linux-config-transpiler"
+
+prepare() {
+    default_prepare || return
+}
+
+build() {                        
+	mkdir -p "$builddir" && cd "$builddir"
+#	sudo apk update && sudo apk add --virtual .build-deps git musl-dev
+	git clone --branch v$CT_VER https://github.com/coreos/container-linux-config-transpiler .
+	sed -i -e 's/^\(GLDFLAGS=".*\)\("[ ]*\)$/\1 $GLDFLAGSX\2/' -e $'s/^GLDFLAGS=/CC=`which gcc`\\nGLDFLAGSX="-w -linkmode external -extldflags \\\\"-static\\\\""\\n&/' build
+	./build
+#	mv bin/ct /usr/bin/ && mv Dockerfile.build-scratch /tmp && \
+#	rm -rf $GOPATH
+#	apk del .build-deps && rm -rf /var/cache/apk
+                 
+}                                
+                                 
+package() {
+	install -Dm755 "$builddir/bin/ct" "$pkgdir/usr/bin/ct"
+
+	echo "$pkgname-$pkgver-r$pkgrel.apk" > $HOME/apk_names
+}
