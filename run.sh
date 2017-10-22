@@ -8,4 +8,5 @@ fi
 export GITHUB_REPO=`git config --get remote.origin.url | sed -E -e 's#\.git$##'  -e 's#^.*github.com/(.*)$#\1#'`
 export GITHUB_RELEASE=v1.0
 
-docker-compose run --rm coreos-ct
+#docker-compose run --rm coreos-ct
+docker-compose run --rm tomcat-apr

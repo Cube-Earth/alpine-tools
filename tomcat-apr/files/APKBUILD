@@ -1,0 +1,39 @@
+pkgname=tomcat-apr
+pkgver=$TOMCAT_APR_VER
+pkgrel=0
+pkgdesc="Tomcat APR"
+url="https://github.com/Cube-Earth/alpine-tools/tree/master/tomcat-apr"
+arch="x86_64"
+license="ASL 2.0"
+maintainer="Necromancer <necromancer@cube.earth>"
+depends="apr openssl"
+makedepends="apr-dev openssl-dev $depends musl-dev tar make"
+install=""
+#subpackages="$pkgname-dev $pkgname-doc"
+source=""
+builddir="/apk_build/build"
+
+prepare() {
+    default_prepare || return
+}
+
+build() {
+	mkdir -p "$builddir" && cd "$builddir"	
+	curl -J -O -L http://www-eu.apache.org/dist/tomcat/tomcat-connectors/native/$TOMCAT_APR_VER/source/tomcat-native-$TOMCAT_APR_VER-src.tar.gz
+	tar xzf tomcat-native-*-src.tar.gz
+	cd tomcat-native-*-src/native
+	
+	./configure --with-apr=/usr/bin \
+            --with-java-home=$JAVA_HOME \
+            --with-ssl=/usr/include/openssl \
+            --prefix="$pkgdir/usr/tomcat-apr"
+	
+	make
+}                                
+                                 
+package() {
+	mkdir -p "$pkgdir/usr/tomcat-apr"
+	make install
+
+	echo "$pkgname-$pkgver-r$pkgrel.apk" > $HOME/apk_names
+}

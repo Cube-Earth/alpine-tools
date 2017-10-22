@@ -16,3 +16,38 @@ services:
     - GITHUB_PWD=${GITHUB_PWD}
     - GITHUB_REPO=${GITHUB_REPO}
     - GITHUB_RELEASE=${GITHUB_RELEASE}
+
+  xmlstarlet:
+    build:
+        context: xmlstarlet
+        args:
+            - http_proxy
+            - https_proxy
+            - no_proxy
+    image: cubeearth/tmp_apline-tools_xmlstarlet
+    volumes:
+    - ./apk_keys:/apk_keys
+    - ./apk:/apk
+    environment:
+    - GITHUB_EMAIL=${GITHUB_EMAIL}
+    - GITHUB_PWD=${GITHUB_PWD}
+    - GITHUB_REPO=${GITHUB_REPO}
+    - GITHUB_RELEASE=${GITHUB_RELEASE}
+
+  tomcat-apr:
+    build:
+        context: tomcat-apr
+        args:
+            - http_proxy
+            - https_proxy
+            - no_proxy
+    image: cubeearth/tmp_apline-tools_tomcat-apr
+    volumes:
+    - ./apk_keys:/apk_keys
+    - ./apk:/apk
+    environment:
+    - GITHUB_EMAIL=${GITHUB_EMAIL}
+    - GITHUB_PWD=${GITHUB_PWD}
+    - GITHUB_REPO=${GITHUB_REPO}
+    - GITHUB_RELEASE=${GITHUB_RELEASE}
+
